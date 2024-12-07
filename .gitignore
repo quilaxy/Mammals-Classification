@@ -1,6 +1,8 @@
 __pycache__/
 deep-env/
 mammals/
-test.py
 saved_model/
 tfjs_model/
+image-test/
+training.py
+model.py

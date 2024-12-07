@@ -10,17 +10,16 @@ class SimpleTorchDataset(torch.utils.data.Dataset):
         self.dataset: list[tuple[str, np.ndarray]] = []
         self.root_dir = root_dir
 
-        self.__add_dataset__("camel",            [1, 0, 0, 0, 0, 0, 0])
-        self.__add_dataset__("dolphin",          [0, 1, 0, 0, 0, 0, 0])
-        self.__add_dataset__("koala",            [0, 0, 1, 0, 0, 0, 0])
-        self.__add_dataset__("orangutan",        [0, 0, 0, 1, 0, 0, 0])
-        self.__add_dataset__("snow_leopard",     [0, 0, 0, 0, 1, 0, 0])
-        self.__add_dataset__("water_buffalo",    [0, 0, 0, 0, 0, 1, 0])
-        self.__add_dataset__("zebra",            [0, 0, 0, 0, 0, 0, 1])
+        self.__add_dataset__("arctic_fox",           [1, 0, 0, 0, 0, 0, 0])
+        self.__add_dataset__("camel",               [0, 1, 0, 0, 0, 0, 0])
+        self.__add_dataset__("dolphin",             [0, 0, 1, 0, 0, 0, 0])
+        self.__add_dataset__("koala",               [0, 0, 0, 1, 0, 0, 0])
+        self.__add_dataset__("orangutan",           [0, 0, 0, 0, 1, 0, 0])
+        self.__add_dataset__("snow_leopard",        [0, 0, 0, 0, 0, 1, 0])
+        self.__add_dataset__("water_buffalo",       [0, 0, 0, 0, 0, 0, 1])
 
         post_processing = [
-            transforms.ToTensor(),
-            transforms.Normalize(mean=[0.4804, 0.4785, 0.4361], std=[0.2149, 0.2122, 0.2146])
+            transforms.ToTensor()
         ]
 
         self.augmentation = transforms.Compose(

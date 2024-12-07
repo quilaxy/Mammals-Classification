@@ -35,12 +35,13 @@ if __name__ == "__main__":
     metrics.activation = torch.nn.Softmax(1)
 
     model        = ExtendedSimpleCNN2D(3, 7).to(device)
-    optimizer    = torch.optim.Adam(model.parameters(), lr = 0.0001, weight_decay=1e-4)
+    optimizer    = torch.optim.Adam(model.parameters(), lr = 0.0001, weight_decay=1e-3)
 
     train_transforms = [
         transforms.RandomHorizontalFlip(), 
         transforms.RandomRotation(degrees=90), 
-        transforms.RandomVerticalFlip()
+        transforms.RandomVerticalFlip(),
+        transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.1)
     ]
 
     validation_dataset = SimpleTorchDataset('./dataset/val')

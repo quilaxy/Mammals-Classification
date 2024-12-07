@@ -34,8 +34,8 @@ class ExtendedSimpleCNN2D(nn.Module):
     def __init__(self, input_channels : int, output_classes : int) -> None:
         super().__init__()
 
-        self.mean = torch.tensor([0.4804, 0.4785, 0.4361])  
-        self.std = torch.tensor([0.2149, 0.2122, 0.2146])   
+        self.mean = torch.tensor([0.4824, 0.4790, 0.4372])  
+        self.std = torch.tensor([0.2118, 0.2099, 0.2135])   
 
         self.feet = nn.Sequential(
             nn.Conv2d(input_channels, 16, kernel_size = 5, stride = 2, padding = 1)
@@ -54,8 +54,9 @@ class ExtendedSimpleCNN2D(nn.Module):
         self.head = nn.Sequential(
             nn.Linear(256, 64),
             nn.LeakyReLU(),
-            nn.Dropout(0.4),
-            nn.Linear(64, output_classes)
+            nn.Dropout(0.5),
+            nn.Linear(64, output_classes),
+            nn.Softmax(dim=1)
         )
     
     def normalize(self, x: torch.Tensor) -> torch.Tensor:
@@ -100,8 +101,8 @@ if __name__ == "__main__":
 
     # Dummy input for size [batch_size, channels, height, width] -> [1, 3, 177, 177]
     dummy_input = torch.rand(1, 3, 177, 177).to(cux)
-    mean = torch.tensor([0.4804, 0.4785, 0.4361], device=cux).view(1, 3, 1, 1)
-    std = torch.tensor([0.2149, 0.2122, 0.2146], device=cux).view(1, 3, 1, 1)
+    mean = torch.tensor([0.4824, 0.4790, 0.4372], device=cux).view(1, 3, 1, 1)
+    std = torch.tensor([0.2118, 0.2099, 0.2135], device=cux).view(1, 3, 1, 1)
     dummy_input = (dummy_input - mean) / std
 
     # Perform inference to verify the model
@@ -113,8 +114,8 @@ if __name__ == "__main__":
 
     assert output.shape == (1, 7), f"Unexpected output shape: {output.shape}"
     assert torch.is_tensor(output), "Output must be a tensor"
-    print("Output is logits. Example values:", output[0])
-
+    assert torch.allclose(output.sum(dim=1), torch.tensor(1.0)), "Probabilities must sum to 1"
+    print("Output is probabilities. Example values:", output[0])
 
     # Export model to ONNX
     torch.onnx.export(
